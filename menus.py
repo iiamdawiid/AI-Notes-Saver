@@ -12,7 +12,9 @@ def start_menu():
             try:
                 menu_choice = int(input("Enter choice: "))
                 if menu_choice not in {0, 1, 2}:
-                    print(f"\n{Fore.RED}ERROR: Please enter number 1-3{Style.RESET_ALL}\n")
+                    print(
+                        f"\n{Fore.RED}ERROR: Please enter number 1-3{Style.RESET_ALL}\n"
+                    )
                 else:
                     break
             except ValueError:
@@ -20,9 +22,7 @@ def start_menu():
 
         match menu_choice:
             case 0:
-                print(
-                    f"\n{Fore.RED}PROGRAM QUIT{Style.RESET_ALL}\n"
-                )
+                print(f"\n{Fore.RED}PROGRAM QUIT{Style.RESET_ALL}\n")
                 break
             case 1:
                 save_notes_menu()
@@ -37,4 +37,4 @@ def save_notes_menu():
 
 def free_roam_menu():
     print("\n" + " Free-Roam ".center(30, "="))
-    get_user_prompt() # TODO: Finish free_roam print function
+    get_user_prompt()  # TODO: Finish free_roam print function

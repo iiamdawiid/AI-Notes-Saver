@@ -1,4 +1,6 @@
 import os
+import re
+import sys
 import google.generativeai as geneai
 from colorama import Fore, Style
 from dotenv import load_dotenv
@@ -22,8 +24,7 @@ def get_gemini_response(user_prompt, save=False):
 
     pieces_of_info = [response.text]
 
-    for info in pieces_of_info:
-        print(info)
+    display_ai_response(pieces_of_info, save)
 
     if save:
         while True:
@@ -39,13 +40,31 @@ def get_gemini_response(user_prompt, save=False):
             print(f"\n{Fore.GREEN}CONTINUE{Style.RESET_ALL}\n")
             return
     else:
-        print("No save")
+        while True:
+            cont = input("Enter [C] to continue or [Q] to quit: ").upper()
+            if cont not in {"C", "Q"}:
+                print(f"\n{Fore.RED}ERROR: Please enter [C] or [Q]{Style.RESET_ALL}\n")
+            else:
+                break
+        if cont == "C":
+            print(f"\n{Fore.GREEN}CONTINUE{Style.RESET_ALL}\n")
+            return
+        else:
+            sys.exit(f"\n{Fore.RED}PROGRAM TERMINATED{Style.RESET_ALL}\n")
 
 
 def save_to_file(pieces_of_info):
-    file_name = input(
-        "Enter file name to save: "
-    ).strip()  # implement regex to check valid file name
+    while True:
+        file_name = input(
+            "Enter file name to save: "
+        ).strip()  # implement regex to check valid file name
+        if not validate_file_name(file_name):
+            print(
+                f"\n{Fore.RED}ERROR: Please enter valid file name{Style.RESET_ALL}{Style.RESET_ALL}\n"
+            )
+        else:
+            break
+
     folder_path = r"C:\Users\jachy\Documents\Coding\AI Notes"
     save_path = os.path.join(folder_path, f"{file_name}.txt")
 
@@ -63,3 +82,17 @@ def save_to_file(pieces_of_info):
 
     except Exception as e:
         print(f"\n{Fore.RED}ERROR: Failed to save file:{Style.RESET_ALL} {e}\n")
+
+
+def display_ai_response(response, save=False):
+    if save:
+        for line in response:
+            print(f"\n{Fore.GREEN}{line}{Style.RESET_ALL}")
+    else:
+        for line in response:
+            print(f"\n{Fore.YELLOW}{line}{Style.RESET_ALL}")
+
+
+def validate_file_name(file_name):
+    regex = r"^[a-zA-Z0-9_\-]+$"
+    return re.match(regex, file_name)
